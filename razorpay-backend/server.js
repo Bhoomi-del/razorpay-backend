@@ -10,13 +10,21 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Initialize Razorpay with credentials from .env
+// Root route for basic status and env var check
+app.get("/", (req, res) => {
+  res.send({
+    message: "Backend running",
+    key_id: process.env.RAZORPAY_KEY_ID ? "Loaded" : "Missing"
+  });
+});
+
+// Initialize Razorpay with credentials from environment variables
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_SECRET_KEY
 });
 
-// API route to create Razorpay Order
+// Route to create a Razorpay order
 app.post("/create-order", async (req, res) => {
   try {
     const options = {
@@ -35,5 +43,7 @@ app.post("/create-order", async (req, res) => {
 
 // Start the server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+
+
 
